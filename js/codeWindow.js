@@ -72,8 +72,8 @@ class CodeWindow{
                 
         amdRequire(['vs/editor/editor.main'], function() {
             tempEditor = monaco.editor.create(document.getElementById(editorDiv.id), {
-                scrollBeyondLastLine: false,
-                lineHeight: 21,
+                // scrollBeyondLastLine: false,
+                fontSize: 24
             });
             
             //First loading takes some time, so create first instance on application init

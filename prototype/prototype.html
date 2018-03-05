@@ -86,14 +86,16 @@
         require(['vs/editor/editor.main'], function() {
             editor1 = monaco.editor.create(document.getElementById('editor1'), {
                 readOnly: true,
-                scrollBeyondLastLine: false,
-                language: 'csharp'
+                // scrollBeyondLastLine: true,
+                language: 'csharp',
+                fontSize: 24
             });
             
             editor2 = monaco.editor.create(document.getElementById('editor2'), {
                 readOnly: true,
-                scrollBeyondLastLine: false,
-                language: 'csharp'
+                // scrollBeyondLastLine: false,
+                language: 'csharp',
+                fontSize: 24
             });
         });
 
