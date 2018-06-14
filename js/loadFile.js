@@ -51,20 +51,27 @@ function loadProject(){
             continue;
         }
 
-        nodeIndex++;
+        // CLEANUP
+        // nodeIndex++;
         
         //if next fixation is in another file then generate a color for current fixations
-        if(nodeIndex < fixations.length - 1 && fixations[nodeIndex].data.path !== fixations[nodeIndex + 1].data.path){
+        // CLEANUP
+        //if(nodeIndex < fixations.length - 1 && fixations[nodeIndex].data.path !== fixations[nodeIndex + 1].data.path){
+        if (i < fixations.length - 1
+            && fixations[i].data.path !== fixations[i + 1].data.path) 
+        {    
             lastColor = '#'+Math.random().toString(16).substr(-6);
             
-            codeWindow.addNode(fixations[nodeIndex], lastColor);
+            codeWindow.addNode(i, fixations[i], lastColor);
         }
-        else if(lastColor !== null){ //if current fixation is first in this file set its color
-            codeWindow.addNode(fixations[nodeIndex], lastColor);
+        else if (lastColor !== null) 
+        { //if current fixation is first in this file set its color
+            codeWindow.addNode(i, fixations[i], lastColor);
             lastColor = null;
         }
-        else{
-            codeWindow.addNode(fixations[nodeIndex]);
+        else
+        {
+            codeWindow.addNode(i, fixations[i]);
         }
     }
     
