@@ -241,7 +241,7 @@ class CodeWindow {
 
             dPosition.id = id;
 
-            new Action("move", dPosition);
+            undoArray.push(new Action("move", dPosition));
             redoArray = [];
 
             project.saveFixationEdit(e.target);

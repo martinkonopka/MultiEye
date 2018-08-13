@@ -37,7 +37,7 @@ class Pattern {
 
             project.changesPending = true;
             project.savePattern(this);
-            new Action("create", this);
+            undoArray.push(new Action("create", this));
             redoArray = [];
         }
         else {
@@ -193,7 +193,7 @@ class Pattern {
         project.changesPending = true;
 
         if (!undo) {
-            new Action("delete", this);
+            undoArray.push(new Action("delete", this));
             redoArray = [];
         }
     }
@@ -364,7 +364,7 @@ function sortPatternLines() {
         let commitChanges = editingPattern.changeFixations();
 
         if (commitChanges) {
-            new Action("edit", editingPattern);
+            undoArray.push(new Action("edit", editingPattern));
             redoArray = [];
             project.changePattern(editingPattern);
         }

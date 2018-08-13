@@ -13,8 +13,6 @@ class Action {
                 this.pattern = edits;
                 break;
         }
-
-        undoArray.push(this);
     }
 
     undo() {
