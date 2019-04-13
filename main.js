@@ -16,172 +16,172 @@ let configPath;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
-function createWindow () {
+function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
         'minHeight': 800,
         'minWidth': 1000
     });
     mainWindow.maximize();
-    
+
     let template = [{
-            label: "File",
-            submenu: [
-                {
-                  label: "Open",
-                    accelerator: "CmdOrCtrl+O",
-                    click: function(){
-                        const dialog = electron.dialog;
+        label: "File",
+        submenu: [
+            {
+                label: "Open",
+                accelerator: "CmdOrCtrl+O",
+                click: function () {
+                    const dialog = electron.dialog;
 
-                        let options = {
-                            title: "Open File",
-                        };
+                    let options = {
+                        title: "Open File",
+                    };
 
-                        dialog.showOpenDialog(mainWindow, options, function(filename){
-                            if(filename !== undefined){
-                                mainWindow.webContents.send("open", filename[0]);
-                            }
-                        });
-                    }
-                },
-                {
-                    type: "separator"
-                },
-                {
-                    label: "Save",
-                    accelerator: "CmdOrCtrl+S",
-                    click: function(){
-                        mainWindow.webContents.send("save");
-                    }
-                },
-                {
-                    label: "Save As...",
-                    accelerator: "Shift+CmdOrCtrl+S",
-                    click: function(){
-                        mainWindow.webContents.send("saveAs");
-                    }
-                },
-                {
-                    type: "separator"
-                },
-                {
-                    label: "Export Patterns As...",
-                    accelerator: "CmdOrCtrl+E",
-                    click: function(){
-                        mainWindow.webContents.send("export");
-                    }
-                },
-                {
-                    label: "Import Patterns",
-                    accelerator: "CmdOrCtrl+I",
-                    click: function(){
-                        const dialog = electron.dialog;
-
-                        let options = {
-                            title: "Import Patterns",
-                        };
-
-                        dialog.showOpenDialog(mainWindow, options, function(filename){
-                            if(filename !== undefined){
-                                mainWindow.webContents.send("import", filename[0]);
-                            }
-                        });
-                    }
-                },
-                {
-                    type: "separator"
-                },
-                {
-                    label: "Preferences",
-                    click: function(){
-                        const path = require('path');
-                        
-                        const prefPath = path.join('file://', __dirname, '/preferences.html');
-                        
-                        let win = new BrowserWindow({ 
-                            width: 600, 
-                            height: 400,
-                            'minWidth': 600,
-                            'minHeight': 400,
-                        });
-                        win.on('close', function () { win = null });
-                        win.loadURL(prefPath);
-                        win.setMenu(null);
-                        
-                        win.webContents.once("dom-ready", function(){
-                            win.webContents.send("config", config);
-                        });
-                        
-                        win.show();
-                    }
-                },
-                {
-                    type: "separator"
-                },
-                {
-                    label: "Exit",
-                    role: "quit"
-                }
-            ]
-        },
-        {
-            label: "Edit",
-            submenu:[
-                {
-                    label: "Undo",
-                    accelerator: "CmdOrCtrl+Z",
-                    click: function(){
-                        mainWindow.webContents.send("undo");
-                    }
-                },
-                {
-                    label: "Redo",
-                    accelerator: "CmdOrCtrl+Y",
-                    click: function(){
-                        mainWindow.webContents.send("redo");
-                    }
-                }
-            ]
-        },
-        {
-            label: "View",
-            submenu:[
-                {
-                    label: "Reload",
-                    accelerator: "F5",
-                    role: "reload"
-                },
-                {
-                    label: "Toggle Developer Tools",
-                    accelerator: (function () {
-                        if (process.platform === 'darwin') {
-                            return 'Alt+Command+I'
-                        } 
-                        else {
-                            return 'Ctrl+Shift+I'
+                    dialog.showOpenDialog(mainWindow, options, function (filename) {
+                        if (filename !== undefined) {
+                            mainWindow.webContents.send("open", filename[0]);
                         }
-                    })(),
-                    role: "toggledevtools"
-                },
-                {
-                    type: "separator"
-                },
-                {
-                    label: "Toggle Fullscreen",
-                    accelerator: (function () {
-                        if (process.platform === 'darwin') {
-                            return 'Ctrl+Command+F'
-                        } 
-                        else {
-                            return 'F11'
-                        }
-                    })(),
-                    role: "togglefullscreen"
+                    });
                 }
-            ]
-        }
+            },
+            {
+                type: "separator"
+            },
+            {
+                label: "Save",
+                accelerator: "CmdOrCtrl+S",
+                click: function () {
+                    mainWindow.webContents.send("save");
+                }
+            },
+            {
+                label: "Save As...",
+                accelerator: "Shift+CmdOrCtrl+S",
+                click: function () {
+                    mainWindow.webContents.send("saveAs");
+                }
+            },
+            {
+                type: "separator"
+            },
+            {
+                label: "Export Patterns As...",
+                accelerator: "CmdOrCtrl+E",
+                click: function () {
+                    mainWindow.webContents.send("export");
+                }
+            },
+            {
+                label: "Import Patterns",
+                accelerator: "CmdOrCtrl+I",
+                click: function () {
+                    const dialog = electron.dialog;
+
+                    let options = {
+                        title: "Import Patterns",
+                    };
+
+                    dialog.showOpenDialog(mainWindow, options, function (filename) {
+                        if (filename !== undefined) {
+                            mainWindow.webContents.send("import", filename[0]);
+                        }
+                    });
+                }
+            },
+            {
+                type: "separator"
+            },
+            {
+                label: "Preferences",
+                click: function () {
+                    const path = require('path');
+
+                    const prefPath = path.join('file://', __dirname, '/preferences.html');
+
+                    let win = new BrowserWindow({
+                        width: 600,
+                        height: 400,
+                        'minWidth': 600,
+                        'minHeight': 400,
+                    });
+                    win.on('close', function () { win = null });
+                    win.loadURL(prefPath);
+                    win.setMenu(null);
+
+                    win.webContents.once("dom-ready", function () {
+                        win.webContents.send("config", config);
+                    });
+
+                    win.show();
+                }
+            },
+            {
+                type: "separator"
+            },
+            {
+                label: "Exit",
+                role: "quit"
+            }
+        ]
+    },
+    {
+        label: "Edit",
+        submenu: [
+            {
+                label: "Undo",
+                accelerator: "CmdOrCtrl+Z",
+                click: function () {
+                    mainWindow.webContents.send("undo");
+                }
+            },
+            {
+                label: "Redo",
+                accelerator: "CmdOrCtrl+Y",
+                click: function () {
+                    mainWindow.webContents.send("redo");
+                }
+            }
+        ]
+    },
+    {
+        label: "View",
+        submenu: [
+            {
+                label: "Reload",
+                accelerator: "F5",
+                role: "reload"
+            },
+            {
+                label: "Toggle Developer Tools",
+                accelerator: (function () {
+                    if (process.platform === 'darwin') {
+                        return 'Alt+Command+I'
+                    }
+                    else {
+                        return 'Ctrl+Shift+I'
+                    }
+                })(),
+                role: "toggledevtools"
+            },
+            {
+                type: "separator"
+            },
+            {
+                label: "Toggle Fullscreen",
+                accelerator: (function () {
+                    if (process.platform === 'darwin') {
+                        return 'Ctrl+Command+F'
+                    }
+                    else {
+                        return 'F11'
+                    }
+                })(),
+                role: "togglefullscreen"
+            }
+        ]
+    }
     ];
-    
+
     const menu = Menu.buildFromTemplate(template)
     Menu.setApplicationMenu(menu);
 
@@ -194,11 +194,11 @@ function createWindow () {
 
     let fs = require("fs");
     configPath = app.getPath("userData") + "/config.json";
-    
-    if(fs.existsSync(configPath)){
+
+    if (fs.existsSync(configPath)) {
         config = JSON.parse(fs.readFileSync(configPath, "utf-8"));
     }
-    else{
+    else {
         config = {
             "fixationsDisplayed": 10,
             "showSlidingWindow": true
@@ -206,10 +206,10 @@ function createWindow () {
         fs.writeFileSync(configPath, JSON.stringify(config, null, 4), "utf-8");
     }
 
-    mainWindow.webContents.on("dom-ready", function(){
+    mainWindow.webContents.on("dom-ready", function () {
         mainWindow.webContents.send("config", config);
     });
-    
+
     // Emitted when the window is closed.;
     mainWindow.on('closed', function () {
         // Dereference the window object, usually you would store windows
@@ -242,98 +242,68 @@ app.on('activate', function () {
 });
 
 //Methods that save the project, need to change to save a format other than JSON
-ipcMain.on("save", function(event, args){    
-    const fs = require("fs");
-    
-    fs.writeFileSync("a.json", JSON.stringify(args[1], null, 4), "utf-8");
-    fs.unlinkSync(args[0]);
-    setTimeout(function(){
-       fs.renameSync("a.json", args[0]);
-    }, 100);
-});
-
-ipcMain.on("closingSave", function(event, args){
+ipcMain.on("save", function (event, args) {
     const fs = require("fs");
     fs.writeFileSync(args[0], JSON.stringify(args[1], null, 4), "utf-8");
 });
 
-ipcMain.on("saveAs", function(event, args){
+ipcMain.on("closingSave", function (event, args) {
+    const fs = require("fs");
+    fs.writeFileSync(args[0], JSON.stringify(args[1], null, 4), "utf-8");
+});
+
+ipcMain.on("saveAs", function (event, args) {
     const dialog = electron.dialog;
-    
+
     let options = {
         title: "Save As...",
         defaultPath: args[0],
     };
-    
-    dialog.showSaveDialog(mainWindow, options, function(filename){
-        if(filename !== undefined){
+
+    dialog.showSaveDialog(mainWindow, options, function (filename) {
+        if (filename !== undefined) {
             const fs = require("fs");
-            
+
             mainWindow.webContents.send("newPath", filename);
-            
-            fs.writeFileSync("a.json", JSON.stringify(args[1], null, 4), "utf-8");
 
-            if(fs.existsSync(filename)){
-                fs.unlinkSync(filename);
-
-                setTimeout(function(){
-                    fs.renameSync("a.json", filename);
-                }, 100);
-            }
-            else{
-                fs.renameSync("a.json", filename);
-            }
+            fs.writeFileSync(filename, JSON.stringify(args[1], null, 4), "utf-8");
         }
     });
 });
 
-ipcMain.on("open", function(event, filePath){
+ipcMain.on("open", function (event, filePath) {
     mainWindow.webContents.reload();
-        
-    mainWindow.webContents.once("dom-ready", function(){
-        setTimeout(function(){
-            mainWindow.webContents.send("open", filePath); 
+
+    mainWindow.webContents.once("dom-ready", function () {
+        setTimeout(function () {
+            mainWindow.webContents.send("open", filePath);
         }, 500);
     });
 });
 
-ipcMain.on("export", function(event, args){
+ipcMain.on("export", function (event, args) {
     const dialog = electron.dialog;
-    
+
     let options = {
         title: "Export Patterns As...",
         defaultPath: args[0],
     };
-    
-    dialog.showSaveDialog(mainWindow, options, function(filename){
-        if(filename !== undefined){
+
+    dialog.showSaveDialog(mainWindow, options, function (filename) {
+        if (filename !== undefined) {
             const fs = require("fs");
-            fs.writeFileSync("a.json", JSON.stringify(args[1], null, 4), "utf-8");
-
-            if(fs.existsSync(filename)){
-                fs.unlinkSync(filename);
-
-                setTimeout(function(){
-                    fs.renameSync("a.json", filename);
-                }, 100);
-            }
-            else{
-                fs.renameSync("a.json", filename);
-            }
+            
+            fs.writeFileSync(filename, JSON.stringify(args[1], null, 4), "utf-8");
         }
     });
 });
 
-ipcMain.on("config", function(event, configObj){
+ipcMain.on("config", function (event, configObj) {
     config = configObj;
-    
+
     mainWindow.webContents.send("config", config);
-    
+
     const fs = require("fs");
-    
-    fs.writeFileSync("a.json", JSON.stringify(configObj, null, 4), "utf-8");
-    fs.unlinkSync(configPath);
-    setTimeout(function(){
-       fs.renameSync("a.json", configPath);
-    }, 100);
+
+    fs.writeFileSync(configPath, JSON.stringify(configObj, null, 4), "utf-8");
 });

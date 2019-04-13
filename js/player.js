@@ -1,5 +1,6 @@
 let paused = true; //bool to represent state of player
 let activeCodeWindow = null;
+let currentLoopTimer = null;
 
 //Function to recursively replay the eye movement
 // i -> how many loops are to be played
@@ -7,6 +8,11 @@ let activeCodeWindow = null;
 // seekbarSet -> if the position is set on the seekbar don't move the thumb
 function loop(i, next = false, seekbarSet = false) {
     playIndex++;
+    
+    if (currentLoopTimer) {
+        clearTimeout(currentLoopTimer);
+        currentLoopTimer = null;
+    }
 
     let event = project.getWhole()[playIndex];
     switch (event.name) {
@@ -76,7 +82,7 @@ function loop(i, next = false, seekbarSet = false) {
     slidingWindow.style.left = (step * (playIndex + 1) + 30 - parseInt(slidingWindow.style.width) + 174) + "px";
 
     if (next || !paused) {
-        setTimeout(function () {
+        currentLoopTimer = setTimeout(function () {
             if (--i > 0) { //go to next iteration
                 loop(i, next, seekbarSet);
             }

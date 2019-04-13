@@ -136,10 +136,20 @@ function createTicks() {
         sortPatternLines();
     }
 
+    createSlidingWindow(config.fixationsDisplayed);
+}
+
+function createSlidingWindow(fixationsDisplayed) {
+    let max = project.getWhole().length;
+    let seekbar = document.getElementById("seekbar");
+
+    let step = seekbar.clientWidth / max;
+
     let slidingWindow = document.getElementById("slidingWindow");
 
-    slidingWindow.style.width = (config.fixationsDisplayed * step) + "px";
-    slidingWindow.style.left = (174 + 30 - config.fixationsDisplayed * step) + "px";
+    slidingWindow.style.width = (fixationsDisplayed * step) + "px";
+    slidingWindow.style.left = (174 + 30 - fixationsDisplayed * step) + "px";
+
 }
 
 function importPatterns(filePath) {

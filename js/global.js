@@ -58,14 +58,19 @@ Array.prototype.objectWithFile = function (file) {
 //Function to apply preferences after change
 function applyPreferences(oldConfig, newConfig) {
     let slidingWindow = document.getElementById("slidingWindow");
+    console.log(oldConfig);
+    console.log(newConfig);
+    
     if (oldConfig !== null && project !== null) {
+
+
         if (oldConfig.fixationsDisplayed !== newConfig.fixationsDisplayed) {
             let seekbar = document.getElementById("seekbar");
             let step = 1700 / nodeOrder.length;
 
-
-            slidingWindow.style.width = (newConfig.fixationsDisplayed * step) + "px";
-            slidingWindow.style.left = (step * (playIndex + 1) + 30 - newConfig.fixationsDisplayed * step + 174) + "px";
+            createSlidingWindow(newConfig.fixationsDisplayed);
+            // slidingWindow.style.width = (newConfig.fixationsDisplayed * step) + "px";
+            // slidingWindow.style.left = (step * (playIndex + 1) + 30 - newConfig.fixationsDisplayed * step + 174) + "px";
 
             if (playIndex + 1 === project.getWhole().length) {
                 previousStep(true);
