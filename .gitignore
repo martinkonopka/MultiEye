@@ -27,6 +27,9 @@ coverage
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
 
+# Dependency lock file
+package-lock.json
+
 # Dependency directories
 node_modules
 jspm_packages
