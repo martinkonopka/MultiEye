@@ -241,7 +241,7 @@ class CodeWindow {
 
             dPosition.id = id;
 
-            new Action("move", dPosition);
+            undoArray.push(new Action("move", dPosition));
             redoArray = [];
 
             project.saveFixationEdit(e.target);
@@ -346,17 +346,20 @@ class CodeWindow {
         this.cyWrapper.style.transform = "";
     }
 
-    addNode(json, color = null) {
+    addNode(index, json, color = null) {
         //Create new node
         let node = {
             data: {
-                id: nodeIndex,
+                "id": index,
                 "duration": json.data.duration,
-                "fixationIndex": nodeIndex,
+                "fixationIndex": index,
                 "originalX": json.data.x,
                 "originalY": json.data.y
             },
-            position: { x: json.data.x * scale, y: json.data.y * scale },
+            position: {
+                x: json.data.x * scale,
+                y: json.data.y * scale
+            },
         };
 
         if (this.hidden) {
@@ -369,7 +372,7 @@ class CodeWindow {
 
         //Change color and shape of last nodes in the same file
         if (color !== null) {
-            this.cy.style().selector("#" + nodeIndex).style({
+            this.cy.style().selector("#" + index).style({
                 "background-color": color,
                 "shape": "rectangle",
             }).update();
@@ -382,12 +385,12 @@ class CodeWindow {
         });
 
         //Create edge between nodes
-        if (this.cy.nodes().length > 1 && nodeOrder[nodeIndex - 1].codeWindow === this) {
+        if (this.cy.nodes().length > 1 && nodeOrder[index - 1].codeWindow === this) {
             let edge = {
                 data: {
-                    id: "edge" + (nodeIndex - 1),
-                    source: (nodeIndex - 1),
-                    target: nodeIndex
+                    id: "edge" + (index - 1),
+                    source: (index - 1),
+                    target: index
                 }
             };
 

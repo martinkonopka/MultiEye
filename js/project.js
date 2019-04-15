@@ -124,7 +124,7 @@ class Project {
         });
     }
 
-    //Method to return the combined array of fixations and events sorted by their timestamps
+    // Method to return the combined array of fixations and events sorted by their timestamps
     getWhole() {
         if (this.wholeArray === null) {
             this.wholeArray = this.project.fixations.concat(this.project.events).sort(function (a, b) {

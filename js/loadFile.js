@@ -19,52 +19,72 @@ function loadFile(filePath) {
     }
 }
 
+function loadCodeWindow(ev) {
+    let codeWindow = codeWindows.objectWithFile(ev.data.path);
+    if (codeWindow === null) {
+        codeWindow = new CodeWindow(ev.data);
+        
+        let data = "";
+        if (ev.data.contents) {
+            data = ev.data.contents;
+        }
+        else {
+            console.log("loading data: " + ev.data.path);
+          try {
+              data = fs.readFileSync(ev.data.path, "utf-8");
+          }
+          catch (e) {
+              console.log(ev);
+          }
+        }
+        let extension = path.extname(ev.data.path);
+        
+        codeWindow.addText(data, extension);
+        codeWindows.push(codeWindow);
+    }
+    return codeWindow;
+}
+
 //Function loads all fixations and patterns
 function loadProject() {
     let lastColor = null;
     let wholeProject = project.getWhole();
     let fixations = project.getFixations();
+    let events = project.getEvents();
+
+    events.filter(ev => ev.name === "EditorOpen" && ev.data)
+          .forEach(ev => loadCodeWindow(ev));
 
     for (let i = 0; i < fixations.length; i++) {
         let codeWindow = codeWindows.objectWithFile(fixations[i].data.path); //find if CodeWindow with file already exists
 
-        if (codeWindow === null) {
-            codeWindow = new CodeWindow(fixations[i].data);
-
-            let data;
-
-            try {
-                data = fs.readFileSync(fixations[i].data.path, "utf-8");
-            }
-            catch (e) {
-                console.log(i);
-                console.log(fixations[i]);
-            }
-
-            let extension = path.extname(fixations[i].data.path);
-
-            codeWindow.addText(data, extension);
-            codeWindows.push(codeWindow);
+        // TODO remove
+        if (codeWindow === null) { // this is only fallback if the code window was not loaded from the EditorOpen event before
+            codeWindow = loadCodeWindow(fixations[i]);
         }
 
         if (fixations[i].name !== "Fixation") {
             continue;
         }
 
-        nodeIndex++;
+        // CLEANUP
+        // nodeIndex++;
 
         //if next fixation is in another file then generate a color for current fixations
-        if (nodeIndex < fixations.length - 1 && fixations[nodeIndex].data.path !== fixations[nodeIndex + 1].data.path) {
+        // CLEANUP
+        //if(nodeIndex < fixations.length - 1 && fixations[nodeIndex].data.path !== fixations[nodeIndex + 1].data.path){
+        if (i < fixations.length - 1
+            && fixations[i].data.path !== fixations[i + 1].data.path) {
             lastColor = '#' + Math.random().toString(16).substr(-6);
 
-            codeWindow.addNode(fixations[nodeIndex], lastColor);
+            codeWindow.addNode(i, fixations[i], lastColor);
         }
         else if (lastColor !== null) { //if current fixation is first in this file set its color
-            codeWindow.addNode(fixations[nodeIndex], lastColor);
+            codeWindow.addNode(i, fixations[i], lastColor);
             lastColor = null;
         }
         else {
-            codeWindow.addNode(fixations[nodeIndex]);
+            codeWindow.addNode(i, fixations[i]);
         }
     }
 
